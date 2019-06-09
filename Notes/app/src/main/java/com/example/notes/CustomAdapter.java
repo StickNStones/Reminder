@@ -82,7 +82,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                 final Context context = v.getContext();
                 new AlertDialog.Builder(v.getContext())
                         .setIcon(android.R.drawable.ic_dialog_alert)
-                        .setTitle("Idiot Proof")
+                        .setTitle("Delete Reminder")
                         .setMessage("Do you want to delete this note?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override

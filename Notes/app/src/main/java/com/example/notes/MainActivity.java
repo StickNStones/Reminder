@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
         String textTitle;
         String textContent;
         PendingIntent pendingIntent;
-        textTitle = "Todo";
+        textTitle = "Reminder";
         textContent = topOfList;
         Intent intentForOther = new Intent(ctx.getApplicationContext(), MainActivity.class);
         pendingIntent = PendingIntent.getActivity(ctx, notificationID, intentForOther,0);
@@ -173,10 +173,10 @@ public class MainActivity extends AppCompatActivity {
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setContentTitle(textTitle)
                 .setContentText(textContent)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_MIN)
                 .setOngoing(true)
-                .setContentIntent(pendingIntent);
-        //   .setAutoCancel(true);
+                .setContentIntent(pendingIntent)
+               .setAutoCancel(true);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(ctx);
         notificationManager.notify(notificationID, builder.build());
@@ -184,8 +184,8 @@ public class MainActivity extends AppCompatActivity {
 
     static void createNotificationChannel(Context ctx) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            String channel_name = "My Notification Channel Name";
-            String channel_description = "description";
+            String channel_name = "Sticky Notification";
+            String channel_description = "Top Note to Remember";
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, channel_name, importance);
             mChannel.setDescription(channel_description);
