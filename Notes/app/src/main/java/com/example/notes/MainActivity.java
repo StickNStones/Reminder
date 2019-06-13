@@ -57,22 +57,16 @@ public class MainActivity extends AppCompatActivity {
                 currentTopList = stringArray[0];
                 Log.i("notified_notified",  " notified is " + Integer.toString(notified) + " current toplist = " + currentTopList + ", topOfList = " + topOfList);
 
-                findNotification();
-
                 if (notified == 0) {
                     Log.i("notified_notified", "notified == 0");
                     topOfList = currentTopList;
                    // createNotificationChannel(this);
-                    generateNotification(this);
                     notified = 1;
                 } else if (notified == 1) {
                     Log.i("notified_notified", "notified == 1");
                     if (!currentTopList.equals(topOfList)) {
                         Log.i("notified_notified", "currentTopList != topOfList is facts");
-                        cancelNotification();
                         topOfList = currentTopList;
-                        //createNotificationChannel(this);
-                        generateNotification(this);
                     }
                 }
             }
@@ -108,11 +102,8 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < stringArray.length; i++) {
                 notes.add(stringArray[i]);
                 Log.i("i_notified", "I is " + Integer.toString(i) + " notified is " + Integer.toString(notified));
-                findNotification();
                 if (i == 0 && notified == 0) {
                     topOfList = notes.get(i);
-                    createNotificationChannel(this);
-                    generateNotification(this);
                 }
             }
         }
@@ -146,18 +137,18 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void findNotification() {
+    private void findNotification(int notificationID) {
         // Credit https://stackoverflow.com/a/39315744
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         StatusBarNotification[] notifications = mNotificationManager.getActiveNotifications();
         for (StatusBarNotification notification : notifications) {
-            if (notification.getId() == 56) {
+            if (notification.getId() == notificationID) {
                 notified = 1;
             }
         }
     }
 
-    static void generateNotification(Context ctx) {
+    static void generateNotification(Context ctx, int notificationID) {
         // 10000 is just a magic number for unique number for notifications
         // Might want to use some math trickery to increment it so that each next program can know
         // That the last id of a notification was simply notificationID - 1
@@ -165,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
         String textContent;
         PendingIntent pendingIntent;
         textTitle = "Reminder";
-        textContent = topOfList;
+        textContent = notes.get(notificationID);
         Intent intentForOther = new Intent(ctx.getApplicationContext(), MainActivity.class);
         pendingIntent = PendingIntent.getActivity(ctx, notificationID, intentForOther,0);
 
@@ -194,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void cancelNotification() {
+    public void cancelNotification(int notificationID) {
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.cancel(notificationID); // Notification ID to cancel
     }

@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -26,11 +28,16 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
         public TextView note;
+        public ImageView startNotification;
+        public ImageView endNotification;
 
         public ViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.text_view);
             note = (TextView) itemView.findViewById(R.id.moreText);
+            startNotification = (ImageView) itemView.findViewById(R.id.notificationPopupID);
+            endNotification = (ImageView) itemView.findViewById(R.id.notificationCancelID);
+
         }
     }
 
@@ -65,6 +72,42 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         textView.setText(note);
         noteView.setText(date.toString());
 
+        viewHolder.startNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("position", Integer.toString(position));
+                int pos = (Integer) v.getId();
+
+                Log.i("image click", "position is " + Integer.toString(pos));
+                ImageView imageViewStart = viewHolder.startNotification.findViewById(R.id.notificationPopupID);
+                imageViewStart.setVisibility(View.GONE);
+                ImageView imageViewEnd = viewHolder.endNotification.findViewById(R.id.notificationCancelID);
+                imageViewEnd.setVisibility(View.VISIBLE);
+                MainActivity.createNotificationChannel(v.getContext());
+                MainActivity.generateNotification(v.getContext(), position);
+
+
+
+            }
+        });
+
+        viewHolder.endNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int pos = (Integer) v.getId();
+
+                Log.i("image click", "position is end, "+ Integer.toString(pos));
+                ImageView imageViewStart = viewHolder.startNotification.findViewById(R.id.notificationPopupID);
+                imageViewStart.setVisibility(View.VISIBLE);
+                ImageView imageViewEnd = viewHolder.endNotification.findViewById(R.id.notificationCancelID);
+                imageViewEnd.setVisibility(View.GONE);
+                MainActivity.mNotificationManager = (NotificationManager) v.getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                MainActivity.mNotificationManager.cancel(position);
+            }
+        });
+
+
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -98,7 +141,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                                         MainActivity.topOfList = MainActivity.notes.get(position + 1);
                                         MainActivity.notes.remove(position);
                                         MainActivity.customAdapter.notifyDataSetChanged();
-                                        MainActivity.generateNotification(context);
+                                  //      MainActivity.generateNotification(context);
                                     } else {
                                         MainActivity.notes.remove(position);
                                         MainActivity.customAdapter.notifyDataSetChanged();
@@ -127,5 +170,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     public int getItemCount() {
         return noteArray.size();
     }
+
 
 }
