@@ -34,7 +34,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         public ViewHolder(View itemView) {
             super(itemView);
             title = (TextView) itemView.findViewById(R.id.text_view);
-            note = (TextView) itemView.findViewById(R.id.moreText);
+          //  note = (TextView) itemView.findViewById(R.id.moreText);
             startNotification = (ImageView) itemView.findViewById(R.id.notificationPopupID);
             endNotification = (ImageView) itemView.findViewById(R.id.notificationCancelID);
 
@@ -70,7 +70,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         Date date = new Date(System.currentTimeMillis());
         System.out.println(formatter.format(date));
         textView.setText(note);
-        noteView.setText(date.toString());
+  //      noteView.setText(date.toString());
 
         viewHolder.startNotification.setOnClickListener(new View.OnClickListener() {
             @Override
